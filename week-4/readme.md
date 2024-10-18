@@ -74,4 +74,4 @@ Create token mint - `spl-token create-token`
 
 creates a USDC mint(`Address:  82d1NbiZ41pNNbptvXrC5a2rAEKjyxtBsxnao7A7Prwg`)
 
-supply with sol(mint some token)- `spl-token mint `
+supply with sol(mint some token)- `spl-token mint 82d1NbiZ41pNNbptvXrC5a2rAEKjyxtBsxnao7A7Prwg 100`
