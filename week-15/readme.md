@@ -130,4 +130,108 @@ Fixed-size arrays(array1): Arrays where the size is defined when the array is cr
 
 Dynamic arrays(array2): Arrays where the size can change dynamically during execution (i.e., you can add or remove elements).
 
+# Memory vs Stack vs Storage
+store data either in stack or heap
+stack-> static array
+heap->dynamic array
 
+
+In Solidity, Memory, Stack, and Storage are three distinct locations where data can be stored. Each has its own characteristics, use cases, and costs.
+
+# Storage
+Storage refers to the persistent data that is saved on the blockchain. It is used for state variables that you declare at the contract level. 
+Data stored in storage is written to the blockchain and remains there permanently, across function calls and transactions, until it is explicitly modified.
+
+Writing to storage is costly in terms of gas because it requires changes to the blockchain state, which involves network consensus and storage allocation on the blockchain.
+
+# Memory
+Memory refers to temporary data storage that only exists during the execution of a function. It is cheaper than storage because it is not stored on the blockchain and is only kept in the node's memory while the function is executing. Once the function finishes execution, the data is discarded.
+Not permanently stored, in house only
+
+
+Temporary: Data in memory is erased once the function execution ends.
+Cheaper than storage: Writing to memory is significantly cheaper in terms of gas costs compared to storage because it does not involve writing to the blockchain.
+Not persistent: Data in memory is not stored permanently annanaetbe accessed outside the function that created it.
+Used for Function Arguments/Local Variables:
+When passing large structures or arrays into functions, they are often stered in memory for cheaper gas consumption.
+
+unknown,dynamic length-> heap
+known,const length-> stack
+
+# Stack
+The stack in Solidity is a limited, low-level data structure used to store small, temporary values that are used during the execution of a 
+function. Its akin to a "call stack" in other programming languages. When you call a function, the EVM pushes temporary values (such as function 
+arguments and local variables) onto the stack.
+
+# Modifiers
+In Solidity, modifiers are a powerful feature that allows you to modify the behavior of functions in a reusable and declarative way. 
+They are used to add additional checks or functionality to a function or group of functions, before or after the main logic is executed.
+
+we can store the owner of store into constructor
+```solidity
+//can store owner here in constructor
+    constructor(){
+        owner=msg.sender;
+    }
+    function add(uint a) public{
+        number=number+a;
+    }
+```
+
+they stops everything if checks are not passed.
+
+own custom modifier->
+```sol
+pragma solidity ^0.8.0;|
+contract Example {
+address public owner;
+constructor() {
+owner = msg.sender; // Set the deployer as the owner
+}
+modifier onlyOwner() {
+require(msg sender = owner, "You are not the owner!");
+_;}
+// Function that only the owner can call
+function setOwner(address newOwner) public onlyOwner {
+owner = newOwner;}
+function sum(uint a, uint b) public view onlyOwner returns (uint) €
+return a + b;}}
+```
+
+# Returning Tuples
+```solidity
+function getNumber() public view returns (uint, uint, bool) ( R' infinite gas
+return (number, number, true);}}
+``````
+
+# Pure Function
+In Solidity, pure functions are functions that do not read from or modify the blockchain state. They only rely on their input parameters to perform calculations or operations and return a result.
+Importantly, pure functions do not interact with any state variables or external contracts.
+```sol
+function sumAndMul(uint a, uint b) public pure returns (uint, uint) {
+return (a + b, a * b);}
+```
+
+# Events
+In Ethereum, events are a mechanism that allows smart contracts to log information on the blockchain, which can then be accessed by external consumers (e.g., front-end applications, other contracts, or off-chain services like oracles). Events enable smart contracts to emit logs that can be used for debugging, indexing, or triggering external actions based on contract activity.
+
+```sol
+pragma solidity ^0.8.0;
+contract EventExample{
+// Declare the event with two parameters: an address and a uint
+    event Transfer(address indexed from, address indexed to, uint256 value);
+        // A function that emits the Transfer event
+        function transfer(address to, uint256 value) public {
+            // Emitting the event with the specified parameters
+            emit Transfer(msg-sender, to,value);
+    }
+}
+```
+
+indexed-> Can be used to search all txns from a specific user later
+
+# External Contracts
+we import external contracts which are actually deployed
+they are sort of reusable code
+
+do assignments on quiz.100xdevs.com
