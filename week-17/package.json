@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0"
+  },
+  "name": "week-17",
+  "version": "1.0.0",
+  "description": "What are custom tokens?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
