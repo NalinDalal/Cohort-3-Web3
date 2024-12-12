@@ -32,5 +32,5 @@ contract Token {
         balances[msg.sender] -= amount;
         supply -= amount;
     }
-    
+
 }
