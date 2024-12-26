@@ -88,8 +88,6 @@ You can also run `forge remappings` to confirm things are working as expected
 
 </aside>
 
-
-
 # Std libraries
 
 ### Console Logging
@@ -174,104 +172,93 @@ function test_DealExample() public {
 # Assignments
 
 - Assignment #1 (deal)
-    
-    ```jsx
-    pragma solidity ^0.8.0;
-    
-    contract Deposit {
-        uint256 public minimumDeposit = 1 ether;
-    
-        function deposit() external payable {
-            require(msg.value >= minimumDeposit, "Deposit is below minimum");
-        }
-    }
-    
-    ```
-    
-    - **Use `deal`** to set the balance of an address to 2 ether.
-    - **Test the `deposit` function** to ensure that the address with 2 ether can successfully deposit and pass the minimum deposit check.
-    - **Test the `deposit` function** to ensure that an address with less than 1 ether (after using `deal`) cannot deposit.
+  ```jsx
+  pragma solidity ^0.8.0;
+
+  contract Deposit {
+      uint256 public minimumDeposit = 1 ether;
+
+      function deposit() external payable {
+          require(msg.value >= minimumDeposit, "Deposit is below minimum");
+      }
+  }
+
+  ```
+  - **Use `deal`** to set the balance of an address to 2 ether.
+  - **Test the `deposit` function** to ensure that the address with 2 ether can successfully deposit and pass the minimum deposit check.
+  - **Test the `deposit` function** to ensure that an address with less than 1 ether (after using `deal`) cannot deposit.
 - Assignment #2 (prank)
-    
-    ```jsx
-    pragma solidity ^0.8.0;
-    
-    contract Admin {
-        address public admin;
-    
-        constructor(address _admin) {
-            admin = _admin;
-        }
-    
-        function changeAdmin(address newAdmin) external {
-            require(msg.sender == admin, "Only admin can change the admin");
-            admin = newAdmin;
-        }
-    }
-    ```
-    
-    1. **Use `prank`** to impersonate the `admin` address and call `changeAdmin` to change the admin to a new address. Ensure this succeeds.
-    2. **Use `prank`** to impersonate a non-admin address and call `changeAdmin`. Ensure this fails with the correct error message (i.e., "Only admin can change the admin").
-    
+  ```jsx
+  pragma solidity ^0.8.0;
+
+  contract Admin {
+      address public admin;
+
+      constructor(address _admin) {
+          admin = _admin;
+      }
+
+      function changeAdmin(address newAdmin) external {
+          require(msg.sender == admin, "Only admin can change the admin");
+          admin = newAdmin;
+      }
+  }
+  ```
+  1. **Use `prank`** to impersonate the `admin` address and call `changeAdmin` to change the admin to a new address. Ensure this succeeds.
+  2. **Use `prank`** to impersonate a non-admin address and call `changeAdmin`. Ensure this fails with the correct error message (i.e., "Only admin can change the admin").
 - Assignment #3
-    
-    ```jsx
-    pragma solidity ^0.8.0;
-    
-    contract RestrictedTransfer {
-        address public authorized;
-        uint256 public transferFee = 1 ether;
-    
-        constructor(address _authorized) {
-            authorized = _authorized;
-        }
-    
-        function transfer(address to, uint256 amount) external payable {
-            require(msg.sender == authorized, "Only authorized can transfer");
-            require(msg.value >= transferFee, "Insufficient fee");
-    
-            payable(to).transfer(amount);
-        }
-    }
-    ```
-    
-    - **Use `deal`** to set the balance of the authorized address to 10 ether.
-    - **Use `prank`** to impersonate the authorized address, and send a transfer with the required fee to another address.
-    - **Use `hoax`** to impersonate the authorized address, set the ETH value (1 ether), and call the `transfer` function to test a successful transfer.
-    - **Test a failed transfer** by impersonating a non-authorized address using `prank`
-    
+  ```jsx
+  pragma solidity ^0.8.0;
+
+  contract RestrictedTransfer {
+      address public authorized;
+      uint256 public transferFee = 1 ether;
+
+      constructor(address _authorized) {
+          authorized = _authorized;
+      }
+
+      function transfer(address to, uint256 amount) external payable {
+          require(msg.sender == authorized, "Only authorized can transfer");
+          require(msg.value >= transferFee, "Insufficient fee");
+
+          payable(to).transfer(amount);
+      }
+  }
+  ```
+  - **Use `deal`** to set the balance of the authorized address to 10 ether.
+  - **Use `prank`** to impersonate the authorized address, and send a transfer with the required fee to another address.
+  - **Use `hoax`** to impersonate the authorized address, set the ETH value (1 ether), and call the `transfer` function to test a successful transfer.
+  - **Test a failed transfer** by impersonating a non-authorized address using `prank`
 - Extra - assume
-    
-    ## assume
-    
-    In Solidity testing, particularly when using the **Foundry** framework, `vm.assume` is used to set **assumptions** or **preconditions** for the values that are passed into a test function. (yes you can pass values to a test function that can be used by foundry to test multiple things)
-    
-    ```jsx
-    
-    contract TestCounter is Test {
-        function testExample(uint256 x) public {
-            vm.assume(x < 1000);  // Only test if x is less than 1000
-            assertEq(x + x, x * 2);
-        }
-    
-        function testStringLength(uint256 len) public {
-            vm.assume(len >= 1 && len <= 20);
-            
-            string memory testString = generateString(len);
-            
-            assertEq(bytes(testString).length, len);
-        }
-    
-         function generateString(uint256 len) internal pure returns (string memory) {
-            bytes memory strBytes = new bytes(len);
-            for (uint256 i = 0; i < len; i++) {
-                strBytes[i] = bytes1(uint8(97 + (i % 26)));
-            }
-            return string(strBytes);
-        }
-    }
-    
-    ```
+  ## assume
+  In Solidity testing, particularly when using the **Foundry** framework, `vm.assume` is used to set **assumptions** or **preconditions** for the values that are passed into a test function. (yes you can pass values to a test function that can be used by foundry to test multiple things)
+  ```jsx
+
+  contract TestCounter is Test {
+      function testExample(uint256 x) public {
+          vm.assume(x < 1000);  // Only test if x is less than 1000
+          assertEq(x + x, x * 2);
+      }
+
+      function testStringLength(uint256 len) public {
+          vm.assume(len >= 1 && len <= 20);
+
+          string memory testString = generateString(len);
+
+          assertEq(bytes(testString).length, len);
+      }
+
+       function generateString(uint256 len) internal pure returns (string memory) {
+          bytes memory strBytes = new bytes(len);
+          for (uint256 i = 0; i < len; i++) {
+              strBytes[i] = bytes1(uint8(97 + (i % 26)));
+          }
+          return string(strBytes);
+      }
+  }
+
+  ```
 
 # Deploying contracts
 
@@ -279,7 +266,7 @@ Ref - https://book.getfoundry.sh/forge/deploying
 
 To deploy a contract, use the `forge create` command.
 
-You will need some ETH to be able to deploy it. 
+You will need some ETH to be able to deploy it.
 
 ![Screenshot 2024-12-10 at 10.12.14 PM.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/085e8ad8-528e-47d7-8922-a23dc4016453/98a65ec2-18cf-4fd4-8e8f-5b52972fd4b2/Screenshot_2024-12-10_at_10.12.14_PM.png)
 
