@@ -1,0 +1,16 @@
+{
+  "name": "interaction-be",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ethers": "^6.13.4",
+    "typescript": "^5.7.2"
+  }
+}
