@@ -1,3 +1,6 @@
 [submodule "week-23/staking-contract/staking-contract/lib/forge-std"]
 	path = week-23/staking-contract/staking-contract/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "week-23/staking-contract/staking-contract/lib/openzeppelin-contracts"]
+	path = week-23/staking-contract/staking-contract/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
