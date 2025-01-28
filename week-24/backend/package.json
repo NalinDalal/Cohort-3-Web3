@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc -b && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/pg": "^8.11.11",
+    "axios": "^1.7.9",
+    "bip39": "^3.1.0",
+    "cors": "^2.8.5",
+    "ethers": "^6.13.5",
+    "ethers6": "npm:ethers@^6.13.5",
+    "express": "^4.21.2",
+    "pg": "^8.13.1",
+    "typescript": "^5.7.3"
+  }
+}
