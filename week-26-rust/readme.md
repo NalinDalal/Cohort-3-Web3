@@ -4,6 +4,7 @@ it was hkirat's birthday
 # 07.02
 let's start with rust- fast and safe
 already have installed rust locally, to check if exist->`cargo`
+`cargo` is a package manager for rust
 
 to run rust file: `rustc main.rs
 ./main  # Runs the compiled binary
