@@ -1,0 +1,12 @@
+[package]
+name = "week-36-CPI"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+borsh = "1.5.7"
+borsh-derive = "1.5.7"
+solana-program = "1.18.26"
+
+[lib]
+crate-type = ["cdylib", "lib"]
