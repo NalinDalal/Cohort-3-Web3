@@ -1,0 +1,8 @@
+[package]
+name = "week-41-Private-Key"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ed25519-dalek = "2.1.1"
+solana-sdk = "2.3.0"
