@@ -1,0 +1,37 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  indexer:
+    build: .
+    environment:
+      GRPC_ENDPOINT: " "
+      GRPC_TOKEN: ""
+      DATABASE_URL: "postgresql://indexer:password123@postgres:5432/solana_indexer"
+      NODE_ENV: "production"
+      LOG_LEVEL: "info"
+      MAX_RECONNECT_ATTEMPTS: "10"
+      RECONNECT_DELAY_MS: "5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  postgres_data:
