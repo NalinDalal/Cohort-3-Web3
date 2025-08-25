@@ -1,92 +1,239 @@
-# Solana Real-time Transaction Indexer ⚡
+# Solana Transaction Indexer
 
-[![Star this repo](https://img.shields.io/badge/⭐_Star-This_repo-lightgrey?style=flat)](https://github.com/praptisharma28/Solana-Real-time-Transaction-Indexer)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Solana](https://img.shields.io/badge/Solana-9945FF?style=flat&logo=solana&logoColor=white)](https://solana.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Real-time Solana blockchain indexer that streams live transaction data and stores it in PostgreSQL for analytics and monitoring.
 
-A high-performance, real-time Solana blockchain indexer that streams live transaction data and stores it in PostgreSQL for analytics and monitoring.
+---
 
-For a full guide on indexer, read my blog here: [Indexing on Solana: A Complete Guide to Deposits, Withdrawals, Memos, and Security](https://medium.com/@praptii/indexing-on-solana-a-complete-guide-to-deposits-withdrawals-memos-and-security-4ecb2d2f3f69)
+## How to Run (Docker)
 
-## What It Does
-
-Stream live Solana blockchain data → Filter & Process → Store in Database → Real-time Analytics
-
-- **Real-time Data**: Live blockchain updates via Yellowstone gRPC
-- **Smart Filtering**: Large transfers, DeFi activity, memos, failed transactions
-- **Analytics Ready**: Structured PostgreSQL storage for insights
-- **Production Scale**: Handles Solana's 2000+ TPS throughput
-
-## Demo Screenshots
-
-<img width="589" height="281" alt="gRPC Connection Success" src="https://github.com/user-attachments/assets/1d3c45ff-5fba-4c58-beff-df67bfe75b20" />
-
-*Real-time slot streaming - indexer connected to Solana mainnet*
-
-<img width="516" height="322" alt="Database Connection & Slot Processing" src="https://github.com/user-attachments/assets/863b5f50-6711-442d-9ce0-b51ef6f76daa" />
-
-*Database connected, processing live blockchain data*
-
-<img width="298" height="765" alt="PostgreSQL Database Schema" src="https://github.com/user-attachments/assets/2f958098-77a7-454c-9f09-fa4e2a57ee3b" />
-
-*Clean database schema for blockchain analytics*
-
-## Quick Start
+1. **Clone the repository and enter the directory:**
 
 ```bash
-git clone https://github.com/praptisharma28/Solana-Real-time-Transaction-Indexer
-cd Solana-Real-time-Transaction-Indexer
-npm install
+git clone <your-repo-url>
+cd <your-repo-directory>
+```
 
+2. **Copy and edit your environment file:**
+
+```bash
 cp .env.example .env
+# Edit .env to set:
+# DATABASE_URL="postgresql://indexer:password123@postgres:5432/solana_indexer"
+# GRPC_ENDPOINT="mainnet-beta.grpc.solana.com:443"  # Yellowstone public mainnet
+# Or use your own custom endpoint:
+# GRPC_ENDPOINT="your-custom-grpc-endpoint:443"
+```
 
+3. **Start the indexer and database:**
+
+```bash
+npm run docker:up
+# or
+docker-compose up -d
+```
+
+4. **View indexer logs:**
+
+```bash
+npm run docker:logs
+# or
+docker-compose logs -f indexer
+```
+
+5. **Stop all Docker services:**
+
+```bash
+npm run docker:down
+# or
+docker-compose down
+```
+
+**Prisma commands (migrations/db push) in Docker:**
+
+```bash
+docker-compose exec indexer /bin/sh
+# Inside the container:
 npx prisma db push --schema=src/database/schema.prisma
+npx prisma migrate dev --schema=src/database/schema.prisma
+```
 
-npm run test:connection  # Test gRPC
-npm run test:db         # Test database
+---
 
+## How to Run Locally (No Docker)
+
+1. **Run PostgreSQL in Docker (database only):**
+
+```bash
+docker run -d \
+  --name solana-indexer-postgres \
+  -e POSTGRES_USER=indexer \
+  -e POSTGRES_PASSWORD=password123 \
+  -e POSTGRES_DB=solana_indexer \
+  -p 5432:5432 \
+  postgres:15
+```
+
+2. **Copy and edit your environment file:**
+
+```bash
+cp .env.example .env
+# Edit .env to set:
+# DATABASE_URL="postgresql://indexer:password123@localhost:5432/solana_indexer"
+# GRPC_ENDPOINT="mainnet-beta.grpc.solana.com:443"  # Yellowstone public mainnet
+# Or use your own custom endpoint:
+# GRPC_ENDPOINT="your-custom-grpc-endpoint:443"
+```
+
+3. **Install dependencies:**
+
+```bash
+npm install
+```
+
+4. **Push Prisma schema:**
+
+```bash
+npx prisma db push --schema=src/database/schema.prisma
+```
+
+5. **Test connections:**
+
+```bash
+npm run test:connection
+npm run test:db
+```
+
+6. **Start the app:**
+
+```bash
 npm run dev
 ```
 
-## Subscription Modes
+---
 
-Switch between different data streams in `src/index.ts`:
+## Features
 
-```typescript
-const subscription = createSlotSubscription();
+- Real-time Solana blockchain data streaming
+- Smart filtering (large transfers, DeFi, memos, failed transactions)
+- PostgreSQL storage for analytics
+- Dockerized for easy setup
 
-// Track whale movements (>100 SOL transfers)
-const subscription = createLargeTransferSubscription();
+## Prerequisites
 
-// Monitor DeFi protocols (Raydium, Jupiter, Orca)
+- Docker & Docker Compose installed
+
+## Setup & Run (Docker)
+
+1. **Clone the repository and enter the directory:**
+
+```bash
+git clone <your-repo-url>
+cd <your-repo-directory>
+```
+
+2. **Copy and edit your environment file:**
+
+```bash
+cp .env.example .env
+# Edit .env to set:
+# DATABASE_URL="postgresql://indexer:password123@postgres:5432/solana_indexer"
+# GRPC_ENDPOINT="https://mainnet-beta.grpc.solana.com"
+```
+
+3. **Start the indexer and database with Docker Compose:**
+
+```bash
+npm run docker:up
+# or
+docker-compose up -d
+```
+
+4. **View indexer logs/output (from inside Docker):**
+
+```bash
+npm run docker:logs
+# or
+docker-compose logs -f indexer
+```
+
+5. **Stop all Docker services:**
+
+```bash
+npm run docker:down
+# or
+docker-compose down
+```
+
+**Note:**
+
+> You do NOT need to run `npm run dev` when using Docker. The indexer service starts automatically inside the container.
+
+## Environment Variables
+
+- `DATABASE_URL`: PostgreSQL connection string (use `postgres` as host for Docker)
+- `GRPC_ENDPOINT`: Solana gRPC endpoint (public endpoint recommended)
+- Other variables can be set as needed for logging, reconnect attempts, etc.
+
+## Troubleshooting
+
+- If you see database connection errors, ensure Docker Compose is running and the database service is healthy.
+- For gRPC errors, check your internet connection and endpoint validity.
+
+**If you need to run Prisma commands (like migrations or db push) with Docker:**
+To run Prisma commands inside Docker, use these exact commands:
+
+```bash
+# Open a shell inside the running indexer container
+docker-compose exec indexer /bin/sh
+
+# Then, inside the container, run:
+npx prisma db push --schema=src/database/schema.prisma
+npx prisma migrate dev --schema=src/database/schema.prisma
+```
+
+**Note:**
+
+> Do NOT run Prisma commands on your host when using Docker. The database hostname `postgres` only works inside the Docker network.
+
+---
+
+```
 const subscription = createDeFiSubscription();
 
 // Capture memo-based payments
 const subscription = createMemoSubscription();
 
 const subscription = createFailedTxSubscription();
+
 ```
 
 ## Live Output Examples
 
 **Slot Updates (Network Health)**
+
 ```
+
 [SLOT] 2025-08-24T07:51:26.161Z - Slot: 362152525 (Parent: 362152524)
+
 ```
 
 **Whale Transfers**
+
 ```
+
 [TRANSFER] 2025-08-24T07:51:26.161Z
-  From: 7xKXtg2C...QoQ9HD8i
-  To:   9WzDXwBb...i4qRvKn3
-  Amount: 150.5 SOL
+From: 7xKXtg2C...QoQ9HD8i
+To: 9WzDXwBb...i4qRvKn3
+Amount: 150.5 SOL
+
 ```
 
 **Payment Memos**
+
 ```
+
 [MEMO] 2025-08-24T07:51:26.161Z - Payment ID: TXN_12345
+
 ```
 
 ## Tech Stack
@@ -139,19 +286,3 @@ docker-compose logs -f indexer
 - Configurable data retention
 - Connection pooling support
 - Docker health checks
-
-## License
-
-MIT License - feel free to use for commercial projects!
-
-## Star This Repo
-
-If this helped you build something cool, give it a star!✨ 
-
----
-
-**Built with ❤️ by [Prapti](https://x.com/praptichilling) for the Solana ecosystem**
-
-
-
-
